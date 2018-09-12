@@ -48,7 +48,7 @@ export class LoginService {
   saveToken(token){
     var expireDate = new Date().getTime() + (1000 * token.expires_in);
     this.cookieService.set("access_token", token.access_token, expireDate);
-    this.router.navigate(['/']);
+    this.router.navigate(['/home']);
   }
  
   getResource(resourceUrl) : Observable<any>{
@@ -63,7 +63,7 @@ export class LoginService {
  
   checkCredentials(){
     if (!this.cookieService.check('access_token')){
-        this.router.navigate(['/login']);
+        this.router.navigate(['/home']);
     }
   } 
  
