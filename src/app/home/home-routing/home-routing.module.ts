@@ -5,7 +5,7 @@ import { CrossGraphicsComponent } from '../cross-graphics/cross-graphics.compone
 import { HomeComponent } from '../home.component';
 
 const homeRoutes: Routes = [
-  { path: '', component: HomeComponent,
+  { path: 'home', component: HomeComponent,
     children: [
       { path: 'cross-graphics', component: CrossGraphicsComponent }
     ]

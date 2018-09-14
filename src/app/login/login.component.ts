@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from './services/login.service';
 import { CookieService } from 'ngx-cookie-service';
+declare var $: any;
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,10 @@ export class LoginComponent implements OnInit {
     if(this.loginService.checkCredentials()) {
 
     }
+    $(document).ready(function(){
+      $('.parallax').parallax();
+    });
+        
   }
 
   obtainAccessToken(): void {
