@@ -1,0 +1,23 @@
+.card .card-image img {
+    height: 175px;
+}
+
+body > div > div > div > div > div.card-image > a {
+    width: 68px;
+    height: 68px;
+    left: 20px;
+}
+
+.dropdown-content li > a, .dropdown-content li > span {
+    color: rgb(59, 182, 240);
+}
+
+nav .menu-cm {
+    background: rgb(2,0,36);
+    background: linear-gradient(34deg, rgb(26, 24, 143) 0%, rgb(13, 13, 245) 47%, rgba(0,212,255,1) 100%);
+}
+
+nav .nav-content {
+    background: rgb(255, 255, 255);
+    color: rgb(59, 182, 240);
+}

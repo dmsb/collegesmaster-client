@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from './services/login.service';
-import { CookieService } from 'ngx-cookie-service';
 declare var $: any;
 
 @Component({
@@ -16,9 +15,8 @@ export class LoginComponent implements OnInit {
   constructor(private loginService: LoginService) { }
 
   ngOnInit() {
-    if(this.loginService.checkCredentials()) {
+    this.loginService.checkCredentials();
 
-    }
     $(document).ready(function(){
       $('.parallax').parallax();
     });

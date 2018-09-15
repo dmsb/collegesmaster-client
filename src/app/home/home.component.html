@@ -1,1 +1,62 @@
-<p>dsdhuoi</p>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>College's Master</title>
+</head>
+
+<body>
+    <app-header></app-header>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-image">
+                        <ul id='challenge-dropdown' class='dropdown-content'>
+                            <li><a href="#!">Create Challenge</a></li>
+                            <li><a href="#!">Reply Challenge</a></li>
+                            <li><a href="#!">Ranking</a></li>
+                        </ul>
+                        <ul id='user-profile-dropdown' class='dropdown-content'>
+                            <li><a href="#!">Edit</a></li>
+                            <li><a href="#!">Forgot Password</a></li>
+                            <li><a href="#!" (click)="logout()">Logout</a></li>
+                        </ul>
+                        <nav>
+                            <div class="nav-wrapper menu-cm">
+                                <ul class="right hide-on-med-and-down">
+                                    <li><a class='waves-effect' href='#'>
+                                            <i class="material-icons left">assessment</i>Dashboard</a></li>
+                                    <li><a class='dropdown-trigger waves-effect' href='#' data-target='challenge-dropdown'>
+                                            <i class="material-icons left">assignment</i>Challenges</a></li>
+                                    <li><a class='dropdown-trigger waves-effect' href='#' data-target='user-profile-dropdown'>
+                                            <i class="material-icons left">account_circle</i>Profile</a></li>
+                                    <li><a class='waves-effect' href='#'>
+                                            <i class="material-icons left">language</i>Forums</a></li>
+                                </ul>
+                            </div>
+                        </nav>
+                        <img class="background-user-view" src="../../assets/img/castle-login.jpg">
+                        <a class="btn-large btn-floating halfway-fab waves-effect waves-light red">
+                            <img src="../../assets/img/sample-1.jpg" alt="user-image" class="circle responsive-img">
+                        </a>
+                    </div>
+                    <div class="card-content">
+                        <nav class="nav-extended">
+                            <div class="nav-content">
+                                <span class="nav-title">Bem vindo Diogo</span>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-footer></app-footer>
+</body>
+
+</html>

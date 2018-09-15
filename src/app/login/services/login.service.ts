@@ -62,7 +62,7 @@ export class LoginService {
   }
  
   checkCredentials(){
-    if (!this.cookieService.check('access_token')){
+    if (this.cookieService.check('access_token')){
         this.router.navigate(['/home']);
     }
   } 
