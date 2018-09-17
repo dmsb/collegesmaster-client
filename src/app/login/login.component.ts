@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from './services/login.service';
+import { AuthService } from '../auth/auth.service';
 declare var $: any;
 
 @Component({
@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit {
   username: string;
   password: string;
 
-  constructor(private loginService: LoginService) { }
+  constructor(private loginService: AuthService) { }
 
   ngOnInit() {
     this.loginService.checkCredentials();

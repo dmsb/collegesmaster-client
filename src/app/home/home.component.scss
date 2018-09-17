@@ -1,5 +1,12 @@
+
 .card .card-image img {
-    height: 175px;
+    height: 125px;
+}
+.container {
+    width: 100%;
+}
+.card-content {
+    padding: 1px;
 }
 
 body > div > div > div > div > div.card-image > a {
@@ -13,8 +20,7 @@ body > div > div > div > div > div.card-image > a {
 }
 
 nav .menu-cm {
-    background: rgb(2,0,36);
-    background: linear-gradient(34deg, rgb(26, 24, 143) 0%, rgb(13, 13, 245) 47%, rgba(0,212,255,1) 100%);
+    background: linear-gradient(34deg, rgb(17, 17, 2) 0%, rgb(13, 16, 236) 17%,  rgb(153, 7, 211) 83%);
 }
 
 nav .nav-content {

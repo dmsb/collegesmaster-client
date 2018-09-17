@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from '../login/services/login.service';
+import { AuthService } from '../auth/auth.service';
 declare var $: any;
 
 @Component({
@@ -9,7 +9,7 @@ declare var $: any;
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private loginServices: LoginService) { }
+  constructor(private loginServices: AuthService) { }
 
   ngOnInit() {
     $('.dropdown-trigger').dropdown({
