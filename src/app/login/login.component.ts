@@ -16,15 +16,18 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginService.checkCredentials();
-
     $(document).ready(function(){
+      $('.progress').hide();
       $('.parallax').parallax();
     });
         
   }
 
-  obtainAccessToken(): void {
+  async obtainAccessToken() {
+    $('.progress').show();
+    await new Promise((resolve) => setTimeout(resolve, 800));
     this.loginService.obtainAccessToken(this.username, this.password);
+    $('.progress').hide();
   }
 
 }

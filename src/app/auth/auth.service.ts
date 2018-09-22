@@ -3,6 +3,7 @@ import { HttpClient, HttpRequest, HttpHandler, HttpEvent, HttpHeaders, HttpInter
 import { Observable } from 'rxjs';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
+declare var M: any;
 
 @Injectable({
   providedIn: 'root'
@@ -18,14 +19,11 @@ export class AuthService implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     if(this.cookieService.get('access_token') != '') {
-      alert(this.cookieService.get('access_token'));
       request = request.clone({
         setHeaders: {
           Authorization: `Bearer ${this.cookieService.get('access_token')}`
         }
       });
-    } else {
-      alert(this.cookieService.get('access_token'));
     }
     return next.handle(request);
   }
@@ -49,7 +47,7 @@ export class AuthService implements HttpInterceptor {
       params.toString(), httpOptions)
       .subscribe(
         data => this.saveToken(data),
-        err => alert('Invalid Credentials')); 
+        err =>  M.toast({html: 'Invalid credentials!', classes: 'blue rounded'}));
   }
  
   saveToken(token){
