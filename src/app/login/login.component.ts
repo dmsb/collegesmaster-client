@@ -12,10 +12,9 @@ export class LoginComponent implements OnInit {
   username: string;
   password: string;
 
-  constructor(private loginService: AuthService) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
-    this.loginService.checkCredentials();
     $(document).ready(function(){
       $('.progress').hide();
       $('.parallax').parallax();
@@ -25,8 +24,8 @@ export class LoginComponent implements OnInit {
 
   async obtainAccessToken() {
     $('.progress').show();
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    this.loginService.obtainAccessToken(this.username, this.password);
+    await new Promise((resolve) => setTimeout(resolve, 700));
+    this.authService.obtainAccessToken(this.username, this.password);
     $('.progress').hide();
   }
 

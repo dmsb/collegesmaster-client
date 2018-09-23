@@ -1,15 +1,10 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { CrossGraphicsComponent } from '../cross-graphics/cross-graphics.component';
 import { HomeComponent } from '../home.component';
+import { HomeGuardService } from '../home-guard/home-guard.service';
 
 const homeRoutes: Routes = [
-  { path: 'home', component: HomeComponent,
-    children: [
-      { path: 'cross-graphics', component: CrossGraphicsComponent }
-    ]
-  }
+  { path: 'home', component: HomeComponent, canActivate:[HomeGuardService]}
 ];
 
 @NgModule({
