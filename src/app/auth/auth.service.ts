@@ -78,8 +78,8 @@ export class AuthService implements HttpInterceptor {
   logout() {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': 'Bearer ' + this.cookieService.get('access_token'),
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.cookieService.get('access_token')
       })
     };
 
