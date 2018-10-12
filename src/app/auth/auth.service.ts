@@ -78,16 +78,16 @@ export class AuthService implements HttpInterceptor {
   logout() {
     const httpOptions = {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + this.cookieService.get('access_token')
+        'Authorization': 'Basic ' + btoa("angular-client:secret"),
+        'TOKEN-ID': this.cookieService.get('access_token')
       })
     };
+
+    this.cookieService.delete('access_token');
 
     this.httpClient.delete('http://localhost:4200/collegesmaster/oauth/token', httpOptions)
       .subscribe(
         data => this.router.navigate(['/login']),
         err => M.toast({ html: 'Error in logout request processing', classes: 'red rounded' }));
-
-    this.cookieService.delete('access_token');
   }
 }

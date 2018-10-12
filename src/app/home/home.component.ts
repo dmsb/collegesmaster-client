@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit {
       hover: true, // Activate on hover
       coverTrigger: false // Show list bollow the trigger
     });
+    console.log(btoa("angular-client:secret"));
   }
 
   logout() {
