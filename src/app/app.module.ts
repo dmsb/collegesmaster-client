@@ -2,15 +2,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { HeaderModule } from './header/header.module';
-import { FooterModule } from './footer/footer.module';
-import { AppRoutingModule } from './app-routing/app-routing.module';
-import { LoginModule } from './login/login.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { FormsModule } from '@angular/forms';
-import { HomeModule } from './home/home.module';
-import { AuthService } from './auth/auth.service';
+import { HeaderModule } from './core/header/header.module';
+import { FooterModule } from './core/footer/footer.module';
+import { LoginModule } from './modules/login/login.module';
+import { HomeModule } from './modules/home/home.module';
+import { AppRoutingModule } from './routings/app-routing/app-routing.module';
+import { AuthService } from './core/authentication/auth.service';
 
 @NgModule({
   declarations: [

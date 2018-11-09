@@ -1,0 +1,38 @@
+.card .card-image img {
+    height: 125px;
+}
+
+.card-content {
+    padding: 1px;
+}
+
+body > div > div > div > div > div.card-image > a {
+    width: 68px;
+    height: 68px;
+    left: 20px;
+}
+
+.dropdown-content li > a, .dropdown-content li > span {
+    color: rgb(59, 182, 240);
+}
+
+nav .menu-cm {
+    background-image: linear-gradient(34deg, rgb(8, 45, 94), rgb(18, 112, 167), 
+    rgb(136, 237, 255));
+}
+
+nav .nav-content {
+    background: rgb(255, 255, 255);
+    color: rgb(59, 182, 240);
+}
+
+#user-image {
+    left: 70px;
+    height: 56px;
+    width: 56px;
+}
+
+#user-image > img {
+    height: 56px;
+    width: 56px;
+}
