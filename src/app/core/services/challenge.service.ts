@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Challenge } from '../mocks/challenge/challenge';
+import { Challenge } from '../models/challenge/challenge';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +20,6 @@ export class ChallengeService {
     };
 
     return this.httpClient.get<Challenge[]>('http://localhost:4200/collegesmaster/challenges',
-      httpOptions).subscribe();
+      httpOptions);
   }
 }

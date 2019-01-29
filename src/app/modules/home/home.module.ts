@@ -7,7 +7,6 @@ import { HomeRoutingModule } from '../../routings/home-routing/home-routing.modu
 import { HeaderModule } from '../../core/header/header.module';
 import { FooterModule } from '../../core/footer/footer.module';
 import { HomeGuardService } from '../../core/guards/home-guard/home-guard.service';
-import { ProfileComponent } from './profile/profile.component';
 
 
 @NgModule({
@@ -19,7 +18,7 @@ import { ProfileComponent } from './profile/profile.component';
     StudentModule,
     ProfessorModule
   ],
-  declarations: [HomeComponent, ProfileComponent],
+  declarations: [HomeComponent],
   providers: [
     HomeGuardService
   ]
