@@ -1,4 +1,4 @@
-class Model {
+export class Model {
     id: number;
     version: number;
     creationDate: Date;

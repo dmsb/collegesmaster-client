@@ -1,3 +1,5 @@
-interface Role extends Model {
+import { Model } from "../generic/model";
+
+export class Role extends Model {
     name: string;
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ChallengeService } from 'src/app/core/services/challenge.service';
 import { Challenge } from 'src/app/core/models/challenge/challenge';
+declare var $: any;
+declare var M: any;
 
 @Component({
   selector: 'app-challenges',
@@ -10,22 +12,25 @@ import { Challenge } from 'src/app/core/models/challenge/challenge';
 export class ChallengesComponent implements OnInit {
 
   challenges: Array<Challenge>;
+  selectedChallenge : Challenge;
 
   constructor(private challengeService: ChallengeService) { 
     this.challenges = new Array<Challenge>();
+    this.selectedChallenge = new Challenge();
   }
 
   ngOnInit() {
+
     this.challengeService.getChallengesFromProfessor()
       .subscribe(
         data => this.challenges = data,
         error=> { 
           console.log("Error in recieving data: " + error); 
         });
-  }
 
-  getChallenges() {
-    return this.challenges;
+    $(document).ready(function(){
+      $('.modal').modal();
+    });
   }
 
   editChallenge(challenge: Challenge) {
@@ -36,4 +41,10 @@ export class ChallengesComponent implements OnInit {
     console.log(challengeId);
   }
 
+  setSelectedChallenge(selectedChallenge : Challenge) {
+    this.selectedChallenge = selectedChallenge;
+    $(document).ready(function(){
+      M.updateTextFields();
+    });
+  }
 }
