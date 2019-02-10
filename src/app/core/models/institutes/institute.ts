@@ -1,4 +1,4 @@
-interface Institute extends Model {
+class Institute extends Model {
     name: string;
     courses: Course[];
 }

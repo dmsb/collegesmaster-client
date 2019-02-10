@@ -5,9 +5,17 @@
         <th>Actions</th>
         <th>Title</th>
         <th>Discipline</th>
-        <th>{{chalenges}}</th>
       </tr>
     </thead>
-    
+    <tbody>
+      <tr *ngFor ="let challenge of challenges">
+          <td>
+            <a (click) = "editChallenge(challenge)" class="waves-effect waves-light btn-small"><i class="material-icons center">edit</i></a>
+            <a (click) = "removeChallenge(challenge.id)" class="waves-effect waves-light btn-small"><i class="material-icons center">delete</i></a>
+          </td>
+          <td>{{challenge.title}}</td>
+          <td>{{challenge.discipline.name}}</td>
+      </tr>
+    </tbody>
   </table>
 </div>
