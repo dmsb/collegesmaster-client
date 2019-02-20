@@ -23,4 +23,17 @@ export class ChallengeService {
     return this.httpClient.
       get<Array<Challenge>>('http://localhost:4200/collegesmaster/challenges', httpOptions);
   }
+
+  saveChallenge(challengeUnsaved : Challenge) : Observable<Challenge> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.cookieService.get('access_token')
+      })
+    };
+
+    return this.httpClient.
+      put<Challenge>('http://localhost:4200/collegesmaster/challenges/' + challengeUnsaved.id, challengeUnsaved, httpOptions);
+
+  }
 }

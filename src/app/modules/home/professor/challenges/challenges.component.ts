@@ -27,17 +27,20 @@ export class ChallengesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.refreshChallenges();
+    $(document).ready(function(){
+      $('.modal').modal();
+    });
+  }
 
+  refreshChallenges() {
     this.challengeService.getChallengesFromProfessor()
       .subscribe(
         data => this.challenges = data,
         error=> { 
           console.log("Error in recieving data: " + error); 
         });
-
-    $(document).ready(function(){
-      $('.modal').modal();
-    });
+    this.selectedChallenge = new Challenge();
   }
 
   editChallenge(challenge: Challenge) {
@@ -46,6 +49,21 @@ export class ChallengesComponent implements OnInit {
 
   removeChallenge(challengeId: number) {
     console.log(challengeId);
+  }
+
+  saveChallenge(selectedChallenge: Challenge) {
+    
+    this.challengeService.saveChallenge(selectedChallenge).subscribe(
+      data => {
+        this.selectedChallenge = data;
+        M.toast({html: 'Challenge updated with success!', classes: 'green rounded'});
+        $('#challenge_modal').modal('close');
+        this.refreshChallenges();
+      },
+      error=> { 
+        M.toast({html: 'Challenge can\'t be updated. Please try again more latter.', classes: 'red rounded'});
+        console.log("Error in recieving data: " + error);
+      });
   }
 
   setSelectedChallenge(selectedChallenge : Challenge) {
