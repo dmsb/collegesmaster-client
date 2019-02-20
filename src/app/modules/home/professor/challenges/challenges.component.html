@@ -23,16 +23,28 @@
 <!-- Modal Structure -->
 <div id="challenge_modal" class="modal modal-fixed-footer">
   <div class="modal-content">
-    <h4>Modal Header</h4>
+    <h4><i class="material-icons prefix">account_circle</i>Challenge</h4>
     <div class="row">
       <form class="col s12">
         <div class="row">
           <div class="input-field col s6">
-            <i class="material-icons prefix">account_circle</i>
-            <input id="icon_prefix" type="text" class="validate"
+            <input id="challenge_title" type="text" class="validate"
               required [(ngModel)]="selectedChallenge.title" name="title" #title>
-            <label class="active" for="icon_prefix">Title</label>
+            <label class="active" for="challenge_title">Title</label>
           </div>
+          <div class="input-field col s2">
+            <select [(ngModel)]="selectedChallenge.enabled" name = 'enabled'>
+              <option *ngFor="let option of enabledOptions" [value]="option.id">{{option.value}}</option>
+            </select>
+            <label>Enabled</label>
+          </div>
+          <div class="input-field col s2">
+              <select [(ngModel)]="selectedChallenge.challengeType" name = 'challengeType'>
+                <option *ngFor="let currentChallengeType of (challengeTypeEnum | EnumToArrayPipe)" 
+                [value]="currentChallengeType.key">{{currentChallengeType.value}}</option>
+              </select>
+              <label>Type</label>
+            </div>
         </div>
       </form>
     </div>

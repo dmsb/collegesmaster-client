@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChallengeService } from 'src/app/core/services/challenge.service';
 import { Challenge } from 'src/app/core/models/challenge/challenge';
+import { ChallengeType } from 'src/app/core/enums/challenge-type';
 declare var $: any;
 declare var M: any;
 
@@ -13,6 +14,12 @@ export class ChallengesComponent implements OnInit {
 
   challenges: Array<Challenge>;
   selectedChallenge : Challenge;
+  enabledOptions = [
+    {id : true, value : 'Yes'},
+    {id : false, value : 'No'}
+  ];
+  
+  challengeTypeEnum = ChallengeType;
 
   constructor(private challengeService: ChallengeService) { 
     this.challenges = new Array<Challenge>();
@@ -45,6 +52,7 @@ export class ChallengesComponent implements OnInit {
     this.selectedChallenge = selectedChallenge;
     $(document).ready(function(){
       M.updateTextFields();
+      $('select').formSelect();
     });
   }
 }

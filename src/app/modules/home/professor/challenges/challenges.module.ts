@@ -5,11 +5,13 @@ import { UpdateChallengeComponent } from './update-challenge/update-challenge.co
 import { DeleteChallengeComponent } from './delete-challenge/delete-challenge.component';
 import { ChallengesComponent } from './challenges.component';
 import { FormsModule } from '@angular/forms';
+import { PipesModule } from 'src/app/core/pipes/pipes.module';
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    PipesModule
   ],
   declarations: [CreateChallengeComponent, UpdateChallengeComponent, DeleteChallengeComponent, ChallengesComponent],
   exports: [ChallengesComponent]

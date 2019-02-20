@@ -11,6 +11,8 @@ import { LoginModule } from './modules/login/login.module';
 import { HomeModule } from './modules/home/home.module';
 import { AppRoutingModule } from './routings/app-routing/app-routing.module';
 import { AuthService } from './core/authentication/auth.service';
+import { PipesModule } from './core/pipes/pipes.module';
+import { EnumToArrayPipe } from './core/pipes/enum-to-array.pipe';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,7 @@ import { AuthService } from './core/authentication/auth.service';
     BrowserModule,
     HttpClientModule,
     FormsModule,
+    PipesModule,
     HeaderModule,
     FooterModule,
     LoginModule,
