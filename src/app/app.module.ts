@@ -12,7 +12,8 @@ import { HomeModule } from './modules/home/home.module';
 import { AppRoutingModule } from './routings/app-routing/app-routing.module';
 import { AuthService } from './core/authentication/auth.service';
 import { PipesModule } from './core/pipes/pipes.module';
-import { EnumToArrayPipe } from './core/pipes/enum-to-array.pipe';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatButtonModule, MatTableModule, MatSortModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatToolbarModule, MatIconModule, MatMenuModule, MatProgressSpinnerModule, MatCardModule} from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { EnumToArrayPipe } from './core/pipes/enum-to-array.pipe';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule,
     FormsModule,
     PipesModule,
@@ -27,6 +29,18 @@ import { EnumToArrayPipe } from './core/pipes/enum-to-array.pipe';
     FooterModule,
     LoginModule,
     HomeModule,
+    
+    MatTableModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatMenuModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatSortModule,
     AppRoutingModule
   ],
   providers: [CookieService, 

@@ -3,6 +3,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Challenge } from '../models/challenge/challenge';
 import { Observable } from 'rxjs';
+import { Pageable } from '../models/generic/pageable/pageable';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,8 @@ export class ChallengeService {
   constructor(private httpClient: HttpClient,
     private cookieService: CookieService) { }
 
-  getChallengesFromProfessor() : Observable<Array<Challenge>> {
+  getChallengesFromProfessor(sort: string, order: string, page: number, size : number) : Observable<Pageable<Challenge>> {
+    
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -21,7 +23,7 @@ export class ChallengeService {
     };
 
     return this.httpClient.
-      get<Array<Challenge>>('http://localhost:4200/collegesmaster/challenges', httpOptions);
+      get<Pageable<Challenge>>(`http://localhost:4200/collegesmaster/challenges?sort=${sort},${order}&page=${page}&size=${size}`, httpOptions);
   }
 
   saveChallenge(challengeUnsaved : Challenge) : Observable<Challenge> {
