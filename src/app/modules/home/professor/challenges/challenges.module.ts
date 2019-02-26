@@ -4,9 +4,9 @@ import { CreateChallengeComponent } from './create-challenge/create-challenge.co
 import { UpdateChallengeComponent } from './update-challenge/update-challenge.component';
 import { DeleteChallengeComponent } from './delete-challenge/delete-challenge.component';
 import { ChallengesComponent } from './challenges.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
-import { MatTableModule, MatCardModule, MatSortModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatButtonModule, MatToolbarModule, MatIconModule, MatMenuModule, MatProgressSpinnerModule, MatPaginatorModule } from '@angular/material';
+import { MatTableModule, MatCardModule, MatSortModule, MatInputModule, MatSelectModule, MatFormFieldModule, MatButtonModule, MatToolbarModule, MatIconModule, MatMenuModule, MatProgressSpinnerModule, MatPaginatorModule, MatAutocompleteModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -14,6 +14,7 @@ import { MatTableModule, MatCardModule, MatSortModule, MatInputModule, MatSelect
     FormsModule,
     PipesModule,
 
+    ReactiveFormsModule,
     MatTableModule,
     MatCardModule,
     MatProgressSpinnerModule,
@@ -25,6 +26,7 @@ import { MatTableModule, MatCardModule, MatSortModule, MatInputModule, MatSelect
     MatInputModule,
     MatSelectModule,
     MatSortModule,
+    MatAutocompleteModule,
     MatPaginatorModule
     
   ],

@@ -11,4 +11,5 @@ export class Challenge extends Model {
     questions: Question[];
     enabled: boolean;
     challengeType: ChallengeType;
+
 }

@@ -3,8 +3,11 @@ import { ChallengeService } from 'src/app/core/services/challenge.service';
 import { Challenge } from 'src/app/core/models/challenge/challenge';
 import { ChallengeType } from 'src/app/core/enums/challenge-type';
 import {MatPaginator, MatSort} from '@angular/material';
-import {merge, Observable, of as observableOf} from 'rxjs';
-import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+import {merge, of as observableOf, pipe, Observable} from 'rxjs';
+import {catchError, map, startWith, switchMap, debounceTime} from 'rxjs/operators';
+import { Discipline } from 'src/app/core/models/institutes/discipline';
+import { DisciplineService } from 'src/app/core/services/discipline.service';
+import { FormControl } from '@angular/forms';
 
 declare var $: any;
 declare var M: any;
@@ -22,6 +25,9 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['actions', 'discipline.name',  'title'];
   resultsLength : Number = 0;
   
+  myControl = new FormControl();
+  filteredDisciplines: Observable<Discipline[]>;
+
   challenges: Array<Challenge>;
   selectedChallenge : Challenge;
 
@@ -32,12 +38,19 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   
   challengeTypeEnum = ChallengeType;
 
-  constructor(private challengeService: ChallengeService) { 
+  constructor(private challengeService: ChallengeService, 
+              private disciplineService: DisciplineService) { 
     this.challenges = new Array<Challenge>();
     this.selectedChallenge = new Challenge();
+    this.selectedChallenge.discipline = new Discipline();
   }
 
   ngOnInit() {
+    this.filteredDisciplines = this.myControl.valueChanges
+      .pipe(
+        debounceTime(1000),
+        switchMap(disciplineName => this.disciplineService.getDisciplinesByName(disciplineName))
+    );
     $(document).ready(function(){
       $('.modal').modal();
     });
@@ -62,22 +75,20 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
       ).subscribe(data => this.challenges = data);
   }
 
+  displayFn(discipline?: Discipline): string | undefined {
+    if (discipline) return discipline.name;
+  }
+
   loadChallenges() {
     this.challengeService.getChallengesFromProfessor(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize)
       .subscribe(
-        data => this.challenges = data.content,
+        data => {
+          this.challenges = data.content;
+        },
         error=> { 
           console.log("Error in recieving data: " + error); 
         });
     this.selectedChallenge = new Challenge();
-  }
-
-  editChallenge(challenge: Challenge) {
-    console.log(challenge.title);
-  }
-
-  removeChallenge(challengeId: number) {
-    console.log(challengeId);
   }
 
   saveChallenge(selectedChallenge: Challenge) {
@@ -97,6 +108,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
 
   closeChallengeModal() {
     $('#challenge_modal').modal('close');
+    this.loadChallenges();
   }
 
   setSelectedChallenge(currentChallenge : Challenge) {

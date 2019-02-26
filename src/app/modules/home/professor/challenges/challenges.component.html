@@ -41,7 +41,7 @@
       <form class="col s12">
         <div class="row">
           <div class="input-field col s6">
-            <input id="challenge_title" type="text" class="validate"
+            <input id="challenge_title" type="text" class="validate" maxlength="50"
               required [(ngModel)]="selectedChallenge.title" name="title" #title>
             <label class="active" for="challenge_title">Title</label>
           </div>
@@ -52,12 +52,29 @@
             <label>Enabled</label>
           </div>
           <div class="input-field col s3">
-              <select [(ngModel)]="selectedChallenge.challengeType" name = 'challengeType'>
-                <option *ngFor="let currentChallengeType of (challengeTypeEnum | EnumToArrayPipe)" 
-                [value]="currentChallengeType.key">{{currentChallengeType.value}}</option>
-              </select>
-              <label>Type</label>
-            </div>
+            <select [(ngModel)]="selectedChallenge.challengeType" name = 'challengeType'>
+              <option *ngFor="let currentChallengeType of (challengeTypeEnum | EnumToArrayPipe)" 
+              [value]="currentChallengeType.key">{{currentChallengeType.value}}</option>
+            </select>
+            <label>Type</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s4">
+            <input id="challenge_discipline" type="text" matInput [formControl]="myControl" 
+              [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let discipline of filteredDisciplines | async" [value]="discipline">
+                {{discipline.name}}
+              </mat-option>
+            </mat-autocomplete>
+            <label class="active" for="challenge_discipline">Discipline</label>
+          </div>
+          <div class="input-field col s3">
+            <input id="challenge_creation_date" type="text" 
+            [value]="selectedChallenge.creationDate | date : 'MM/dd/yyyy hh:mm:ss'" readonly>
+            <label class="active" for="challenge_creation_date">Creation Date</label>
+          </div>
         </div>
       </form>
     </div>

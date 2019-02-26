@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HeaderModule } from './core/header/header.module';
 import { FooterModule } from './core/footer/footer.module';
 import { LoginModule } from './modules/login/login.module';
@@ -30,6 +30,7 @@ import {MatButtonModule, MatTableModule, MatSortModule, MatInputModule, MatSelec
     LoginModule,
     HomeModule,
     
+    ReactiveFormsModule,
     MatTableModule,
     MatCardModule,
     MatProgressSpinnerModule,
