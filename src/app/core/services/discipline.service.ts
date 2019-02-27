@@ -23,11 +23,6 @@ export class DisciplineService {
     };
 
     return this.httpClient.
-      get<Array<Discipline>>(`http://localhost:4200/collegesmaster/disciplines?sort=name,asc&name=${disciplineName}`, httpOptions)
-      .pipe(
-        filter(function( elem, i ) {
-          return elem[i].name.toLowerCase().includes(disciplineName);
-        })
-      );
+      get<Array<Discipline>>(`http://localhost:4200/collegesmaster/disciplines?sort=name,asc&name=${disciplineName}`, httpOptions);
   }
 }

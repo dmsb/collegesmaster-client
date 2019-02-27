@@ -4,7 +4,7 @@ import { Challenge } from 'src/app/core/models/challenge/challenge';
 import { ChallengeType } from 'src/app/core/enums/challenge-type';
 import {MatPaginator, MatSort} from '@angular/material';
 import {merge, of as observableOf, pipe, Observable} from 'rxjs';
-import {catchError, map, startWith, switchMap, debounceTime} from 'rxjs/operators';
+import {catchError, map, startWith, switchMap, debounceTime, distinctUntilChanged, filter} from 'rxjs/operators';
 import { Discipline } from 'src/app/core/models/institutes/discipline';
 import { DisciplineService } from 'src/app/core/services/discipline.service';
 import { FormControl } from '@angular/forms';
@@ -25,7 +25,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['actions', 'discipline.name',  'title'];
   resultsLength : Number = 0;
   
-  myControl = new FormControl();
+  myControl: FormControl;
   filteredDisciplines: Observable<Discipline[]>;
 
   challenges: Array<Challenge>;
@@ -43,14 +43,18 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
     this.challenges = new Array<Challenge>();
     this.selectedChallenge = new Challenge();
     this.selectedChallenge.discipline = new Discipline();
+    this.myControl = new FormControl();
   }
 
   ngOnInit() {
+    
     this.filteredDisciplines = this.myControl.valueChanges
       .pipe(
-        debounceTime(1000),
-        switchMap(disciplineName => this.disciplineService.getDisciplinesByName(disciplineName))
-    );
+        debounceTime(300),
+        distinctUntilChanged(),
+        filter(disciplineName => typeof(disciplineName) === 'string'),
+        switchMap(disciplineName => 
+          this.disciplineService.getDisciplinesByName(disciplineName)));
     $(document).ready(function(){
       $('.modal').modal();
     });
@@ -113,9 +117,14 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
 
   setSelectedChallenge(currentChallenge : Challenge) {
     this.selectedChallenge = currentChallenge;
+    this.myControl.setValue(this.selectedChallenge.discipline);
     $(document).ready(function(){
       M.updateTextFields();
       $('select').formSelect();
     });
+  }
+  
+  selectDiscipline(selectedDiscipline : Discipline) {
+    this.selectedChallenge.discipline = selectedDiscipline;
   }
 }
