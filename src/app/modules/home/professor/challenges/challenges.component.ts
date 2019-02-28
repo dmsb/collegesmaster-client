@@ -19,11 +19,17 @@ declare var M: any;
 })
 export class ChallengesComponent implements OnInit, AfterViewInit {
   
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('matPaginatorChallenges') challengesPaginator: MatPaginator;
+  @ViewChild('matSortChallenges') challengesSort: MatSort;
 
   displayedColumns: string[] = ['actions', 'discipline.name',  'title'];
   resultsLength : Number = 0;
+  
+  @ViewChild('matPaginatorQuestions') questionsPaginator: MatPaginator;
+  @ViewChild('matSortQuestions') questionsSort: MatSort;
+
+  displayedQuestionColumns: string[] = ['description', 'punctuation'];
+  resultsQuestionLength : Number = 0;
   
   myControl: FormControl;
   filteredDisciplines: Observable<Discipline[]>;
@@ -61,13 +67,14 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-    merge(this.sort.sortChange, this.paginator.page)
+    this.challengesSort.sortChange.subscribe(() => this.challengesPaginator.pageIndex = 0);
+    merge(this.challengesSort.sortChange, this.challengesPaginator.page)
       .pipe(
         startWith({}),
         switchMap(() => {
           return this.challengeService!.getChallengesFromProfessor(
-            this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize);
+            this.challengesSort.active, this.challengesSort.direction,
+            this.challengesPaginator.pageIndex, this.challengesPaginator.pageSize);
         }),
         map(data => {
           this.resultsLength = data.totalElements;
@@ -84,7 +91,8 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   }
 
   loadChallenges() {
-    this.challengeService.getChallengesFromProfessor(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize)
+    this.challengeService.getChallengesFromProfessor(this.challengesSort.active, this.challengesSort.direction,
+      this.challengesPaginator.pageIndex, this.challengesPaginator.pageSize)
       .subscribe(
         data => {
           this.challenges = data.content;
@@ -117,11 +125,31 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
 
   setSelectedChallenge(currentChallenge : Challenge) {
     this.selectedChallenge = currentChallenge;
+    
     this.myControl.setValue(this.selectedChallenge.discipline);
     $(document).ready(function(){
       M.updateTextFields();
       $('select').formSelect();
     });
+
+    this.questionsSort.sortChange.subscribe(() => this.questionsPaginator.pageIndex = 0);
+      merge(this.questionsSort.sortChange, this.questionsPaginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          return this.challengeService!.getQuestionsByChallenge(
+            this.selectedChallenge.id, this.questionsSort.active, this.questionsSort.direction, 
+            this.questionsPaginator.pageIndex, this.questionsPaginator.pageSize);
+        }),
+        map(data => {
+          this.resultsQuestionLength = data.totalElements;
+          return data.content;
+        }),
+        catchError(() => {
+          return observableOf([]);
+        })
+      ).subscribe(data => this.selectedChallenge.questions = data);
+
   }
   
   selectDiscipline(selectedDiscipline : Discipline) {
