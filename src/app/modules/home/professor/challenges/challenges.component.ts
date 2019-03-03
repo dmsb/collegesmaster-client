@@ -8,6 +8,7 @@ import {catchError, map, startWith, switchMap, debounceTime, distinctUntilChange
 import { Discipline } from 'src/app/core/models/institutes/discipline';
 import { DisciplineService } from 'src/app/core/services/discipline.service';
 import { FormControl } from '@angular/forms';
+import { Question } from 'src/app/core/models/challenge/question';
 
 declare var $: any;
 declare var M: any;
@@ -24,11 +25,11 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
 
   displayedColumns: string[] = ['actions', 'discipline.name',  'title'];
   resultsLength : Number = 0;
-  
+
   @ViewChild('matPaginatorQuestions') questionsPaginator: MatPaginator;
   @ViewChild('matSortQuestions') questionsSort: MatSort;
 
-  displayedQuestionColumns: string[] = ['description', 'punctuation'];
+  displayedQuestionColumns: string[] = ['actions', 'description', 'punctuation'];
   resultsQuestionLength : Number = 0;
   
   myControl: FormControl;
@@ -36,6 +37,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
 
   challenges: Array<Challenge>;
   selectedChallenge : Challenge;
+  selectedQuestion : Question;
 
   enabledOptions = [
     {id : true, value : 'Yes'},
@@ -49,6 +51,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
     this.challenges = new Array<Challenge>();
     this.selectedChallenge = new Challenge();
     this.selectedChallenge.discipline = new Discipline();
+    this.selectedQuestion = new Question();
     this.myControl = new FormControl();
   }
 
@@ -62,8 +65,11 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
         switchMap(disciplineName => 
           this.disciplineService.getDisciplinesByName(disciplineName)));
     $(document).ready(function(){
-      $('.modal').modal();
+      $('.modal').modal({
+        dismissible : false
+      });
     });
+     
   }
 
   ngAfterViewInit() {
@@ -109,6 +115,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
       data => {
         this.selectedChallenge = data;
         M.toast({html: 'Challenge updated with success!', classes: 'green rounded'});
+        this.closeQuestionModal();
         this.closeChallengeModal();
         this.loadChallenges();
       },
@@ -118,11 +125,23 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
       });
   }
 
+  closeQuestionModal(){
+    $('#question_modal').modal('close');
+  }
+
   closeChallengeModal() {
     $('#challenge_modal').modal('close');
     this.loadChallenges();
   }
 
+  setSelectedQuestion(currentQuestion : Question) {
+    this.selectedQuestion = currentQuestion;
+    $(document).ready(function(){
+      M.updateTextFields();
+      $('select').formSelect();
+    });
+  }
+  
   setSelectedChallenge(currentChallenge : Challenge) {
     this.selectedChallenge = currentChallenge;
     

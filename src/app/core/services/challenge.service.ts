@@ -40,7 +40,7 @@ export class ChallengeService {
       get<Pageable<Question>>(`http://localhost:4200/collegesmaster/challenges/questions?challenge_id=${challengeId}&sort=${sort},${order}&page=${page}&size=${size}`, httpOptions);
   }
 
-  saveChallenge(challengeUnsaved : Challenge) : Observable<Challenge> {
+  saveChallenge(unsavedChallenge : Challenge) : Observable<Challenge> {
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -49,7 +49,6 @@ export class ChallengeService {
     };
 
     return this.httpClient.
-      put<Challenge>('http://localhost:4200/collegesmaster/challenges/' + challengeUnsaved.id, challengeUnsaved, httpOptions);
-
+      put<Challenge>('http://localhost:4200/collegesmaster/challenges/' + unsavedChallenge.id, unsavedChallenge, httpOptions);
   }
 }
