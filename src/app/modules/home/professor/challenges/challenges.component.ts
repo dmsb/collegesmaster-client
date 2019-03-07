@@ -109,14 +109,13 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
     this.selectedChallenge = new Challenge();
   }
 
-  saveChallenge(selectedChallenge: Challenge) {
+  saveChallenge(selectedChallenge: Challenge,  isQuestion: boolean) {
     
     this.challengeService.saveChallenge(selectedChallenge).subscribe(
       data => {
         this.selectedChallenge = data;
         M.toast({html: 'Challenge updated with success!', classes: 'green rounded'});
-        this.closeQuestionModal();
-        this.closeChallengeModal();
+        isQuestion == true ? this.closeQuestionModal() : this.closeChallengeModal();
         this.loadChallenges();
       },
       error=> { 
