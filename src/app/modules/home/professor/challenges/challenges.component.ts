@@ -9,6 +9,7 @@ import { Discipline } from 'src/app/core/models/institutes/discipline';
 import { DisciplineService } from 'src/app/core/services/discipline.service';
 import { FormControl } from '@angular/forms';
 import { Question } from 'src/app/core/models/challenge/question';
+import { Alternative } from 'src/app/core/models/challenge/alternative';
 
 declare var $: any;
 declare var M: any;
@@ -32,12 +33,15 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   displayedQuestionColumns: string[] = ['actions', 'description', 'punctuation'];
   resultsQuestionLength : Number = 0;
   
+  displayedAlternativeColumns: string[] = ['actions', 'description', 'isTrue'];
+
   myControl: FormControl;
   filteredDisciplines: Observable<Discipline[]>;
 
   challenges: Array<Challenge>;
   selectedChallenge : Challenge;
   selectedQuestion : Question;
+  selectedAlternative : Alternative;
 
   enabledOptions = [
     {id : true, value : 'Yes'},
@@ -52,6 +56,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
     this.selectedChallenge = new Challenge();
     this.selectedChallenge.discipline = new Discipline();
     this.selectedQuestion = new Question();
+    this.selectedAlternative = new Alternative();
     this.myControl = new FormControl();
   }
 
@@ -78,7 +83,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
       .pipe(
         startWith({}),
         switchMap(() => {
-          return this.challengeService!.getChallengesFromProfessor(
+          return this.challengeService!.getChallengesByProfessor(
             this.challengesSort.active, this.challengesSort.direction,
             this.challengesPaginator.pageIndex, this.challengesPaginator.pageSize);
         }),
@@ -97,31 +102,49 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   }
 
   loadChallenges() {
-    this.challengeService.getChallengesFromProfessor(this.challengesSort.active, this.challengesSort.direction,
+    this.challengeService.getChallengesByProfessor(this.challengesSort.active, this.challengesSort.direction,
       this.challengesPaginator.pageIndex, this.challengesPaginator.pageSize)
       .subscribe(
         data => {
           this.challenges = data.content;
+          this.challenges.forEach(function (challenge) {
+            if(challenge.id == this.selectedChallenge.id) {
+              this.selectedChallenge = challenge;
+            }
+          })
         },
         error=> { 
           console.log("Error in recieving data: " + error); 
         });
-    this.selectedChallenge = new Challenge();
   }
 
-  saveChallenge(selectedChallenge: Challenge,  isQuestion: boolean) {
+  saveChallenge(selectedChallenge: Challenge,  modalType: string) {
     
     this.challengeService.saveChallenge(selectedChallenge).subscribe(
       data => {
         this.selectedChallenge = data;
         M.toast({html: 'Challenge updated with success!', classes: 'green rounded'});
-        isQuestion == true ? this.closeQuestionModal() : this.closeChallengeModal();
         this.loadChallenges();
+        switch(modalType) {
+          case "challenge" :
+            this.closeChallengeModal();
+            break;
+          case "question" :
+            this.closeQuestionModal();
+            break;
+          case "alternative" :
+            this.closeAlternativeModal();
+            break;
+        }
       },
       error=> { 
         M.toast({html: 'Challenge can\'t be updated. Please try again more latter.', classes: 'red rounded'});
         console.log("Error in recieving data: " + error);
       });
+  }
+
+  closeAlternativeModal(){
+    $('#alternative_modal').modal('close');
   }
 
   closeQuestionModal(){
@@ -133,12 +156,26 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
     this.loadChallenges();
   }
 
-  setSelectedQuestion(currentQuestion : Question) {
-    this.selectedQuestion = currentQuestion;
+  setSelectedAlternative(currentAlternative : Alternative) {
+    this.selectedAlternative = currentAlternative;
+
     $(document).ready(function(){
       M.updateTextFields();
       $('select').formSelect();
     });
+  }
+
+  setSelectedQuestion(currentQuestion : Question) {
+    this.selectedQuestion = currentQuestion;
+    
+    $(document).ready(function(){
+      M.updateTextFields();
+      $('select').formSelect();
+    });
+
+    this.challengeService.getAlternativesByQuestion(this.selectedQuestion.id).subscribe(
+      data => this.selectedQuestion.alternatives = data
+    )
   }
   
   setSelectedChallenge(currentChallenge : Challenge) {
@@ -167,7 +204,6 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
           return observableOf([]);
         })
       ).subscribe(data => this.selectedChallenge.questions = data);
-
   }
   
   selectDiscipline(selectedDiscipline : Discipline) {
