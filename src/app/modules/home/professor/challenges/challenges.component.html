@@ -79,7 +79,7 @@
       <h5><i class="material-icons prefix">list</i> Questions</h5>
       <div class="mat-elevation-z1">
         <table mat-table [dataSource]="selectedChallenge.questions"
-          #matSortQuestions='matSort' matSort matSortActive="punctuation" matSortDisableClear matSortDirection="desc">
+          #matSortQuestions='matSort' matSort matSortActive="score" matSortDisableClear matSortDirection="desc">
       
           <!-- Actions Column -->
           <ng-container matColumnDef="actions"> 
@@ -96,10 +96,10 @@
             <td mat-cell *matCellDef="let currentQuestion">{{currentQuestion.description}}</td>
           </ng-container>
       
-          <!-- Punctuation Column -->
-          <ng-container matColumnDef="punctuation">
-            <th mat-header-cell mat-sort-header *matHeaderCellDef>Punctuation</th>
-            <td mat-cell *matCellDef="let currentQuestion">{{currentQuestion.punctuation}}</td>
+          <!-- Score Column -->
+          <ng-container matColumnDef="score">
+            <th mat-header-cell mat-sort-header *matHeaderCellDef>Score</th>
+            <td mat-cell *matCellDef="let currentQuestion">{{currentQuestion.score}}</td>
           </ng-container>
       
           <tr mat-header-row *matHeaderRowDef="displayedQuestionColumns"></tr>
@@ -130,8 +130,8 @@
             <label class="active" for="question_description">Description</label>
           </div>
           <div class="input-field col s2">
-            <input class="validade" type="number" [(ngModel)]="selectedQuestion.punctuation" name = 'punctuation' #punctuation>
-            <label>Punctuation</label>
+            <input class="validade" type="number" [(ngModel)]="selectedQuestion.score" name = 'score' #score>
+            <label>Score</label>
           </div>
         </div>
       </form>
@@ -156,7 +156,7 @@
             <td mat-cell *matCellDef="let currentAlternative">{{currentAlternative.description}}</td>
           </ng-container>
       
-          <!-- Punctuation Column -->
+          <!-- Score Column -->
           <ng-container matColumnDef="isTrue">
             <th mat-header-cell *matHeaderCellDef>Is true</th>
             <td mat-cell *matCellDef="let currentAlternative">{{currentAlternative.isTrue}}</td>

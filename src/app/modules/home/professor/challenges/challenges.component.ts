@@ -3,7 +3,7 @@ import { ChallengeService } from 'src/app/core/services/challenge.service';
 import { Challenge } from 'src/app/core/models/challenge/challenge';
 import { ChallengeType } from 'src/app/core/enums/challenge-type';
 import {MatPaginator, MatSort} from '@angular/material';
-import {merge, of as observableOf, pipe, Observable} from 'rxjs';
+import {merge, of as observableOf, Observable} from 'rxjs';
 import {catchError, map, startWith, switchMap, debounceTime, distinctUntilChanged, filter} from 'rxjs/operators';
 import { Discipline } from 'src/app/core/models/institutes/discipline';
 import { DisciplineService } from 'src/app/core/services/discipline.service';
@@ -30,7 +30,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   @ViewChild('matPaginatorQuestions') questionsPaginator: MatPaginator;
   @ViewChild('matSortQuestions') questionsSort: MatSort;
 
-  displayedQuestionColumns: string[] = ['actions', 'description', 'punctuation'];
+  displayedQuestionColumns: string[] = ['actions', 'description', 'score'];
   resultsQuestionLength : Number = 0;
   
   displayedAlternativeColumns: string[] = ['actions', 'description', 'isTrue'];

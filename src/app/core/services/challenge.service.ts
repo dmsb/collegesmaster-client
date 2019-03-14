@@ -25,7 +25,7 @@ export class ChallengeService {
     };
 
     return this.httpClient.
-      get<Pageable<Challenge>>(`http://localhost:4200/collegesmaster/challenges?sort=${sort},${order}&page=${page}&size=${size}`, httpOptions);
+      get<Pageable<Challenge>>(`http://localhost:4200/collegesmaster/challenges?challengeStatus=${'RELEASED'}&sort=${sort},${order}&page=${page}&size=${size}`, httpOptions);
   }
 
   getQuestionsByChallenge(challengeId : number, sort: string, order: string, page: number, size : number) : Observable<Pageable<Question>> {

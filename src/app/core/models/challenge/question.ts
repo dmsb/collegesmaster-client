@@ -4,7 +4,7 @@ import { Model } from "../generic/model";
 
 export class Question extends Model {
     description: string;
-    punctuation: Number;
+    score: Number;
     alternatives: Alternative[];
     challenge: Challenge;
 }
