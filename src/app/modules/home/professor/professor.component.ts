@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AuthService } from '../../../core/authentication/auth.service';
+import { Router } from '@angular/router';
 
 declare var $: any;
 
@@ -13,7 +14,7 @@ export class ProfessorComponent implements OnInit {
   @Input("page") 
   page: string;
   
-  constructor(private loginServices: AuthService) { }
+  constructor(private loginServices: AuthService, private router: Router) { }
 
   ngOnInit() {
     $('.dropdown-trigger').dropdown({
@@ -21,7 +22,7 @@ export class ProfessorComponent implements OnInit {
       hover: true, // Activate on hover
       coverTrigger: false // Show list bollow the trigger
     });
-    this.page = 'list_challenges';
+    this.page = 'challenges';
   }
 
   logout() {
@@ -29,7 +30,8 @@ export class ProfessorComponent implements OnInit {
   }
 
   choose(page: string) {
-    this.page = page;
+    //this.page = page;
+    this.router.navigate(['/home/professor/' + page]);
   }
 
 }

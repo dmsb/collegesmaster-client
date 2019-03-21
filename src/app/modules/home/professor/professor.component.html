@@ -2,9 +2,9 @@
   <div class="card-image">
     <ul id='challenge-dropdown' class='dropdown-content'>
       <li><a (click)="choose('create_challenge')">Create</a></li>
-      <li><a (click)="choose('list_challenges')">List</a></li>
-      <li><a (click)="choose('replied_challenges')">Replieds</a></li>
-      
+      <li><a (click)="choose('challenges')">List</a></li>
+      <li><a (click)="choose('challenges')">Replieds</a></li>
+      <li><a (click)="choose('challenges')">Test</a></li>
     </ul>
     <ul id='user-profile-dropdown' class='dropdown-content'>
       <li><a>Edit</a></li>
@@ -53,17 +53,4 @@
     </div>
   </div>
 </div>
-<div [ngSwitch]="page">
-  <div *ngSwitchCase="'create_challenge'">
-    <app-challenges></app-challenges>
-  </div>
-  <div *ngSwitchCase="'list_challenges'">
-    <app-challenges></app-challenges>
-  </div>
-  <div *ngSwitchCase="'replied_challenges'">
-    <app-challenges></app-challenges>
-  </div>
-  <div *ngSwitchDefault>
-    <!--Put here the page not found error -->
-  </div>
-</div>
+<router-outlet></router-outlet>

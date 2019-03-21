@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CreateChallengeComponent } from './create-challenge/create-challenge.component';
 import { ChallengesComponent } from './challenges.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PipesModule } from 'src/app/core/pipes/pipes.module';
@@ -31,7 +30,7 @@ import { MatTableModule, MatCardModule, MatSortModule,
     MatPaginatorModule
     
   ],
-  declarations: [CreateChallengeComponent, ChallengesComponent],
+  declarations: [ChallengesComponent],
   exports: [ChallengesComponent]
 })
 export class ChallengesModule { }
