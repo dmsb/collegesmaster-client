@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { AuthService } from '../../../core/authentication/auth.service';
 
 declare var $: any;
@@ -10,6 +10,9 @@ declare var $: any;
 })
 export class ProfessorComponent implements OnInit {
 
+  @Input("page") 
+  page: string;
+  
   constructor(private loginServices: AuthService) { }
 
   ngOnInit() {
@@ -18,10 +21,15 @@ export class ProfessorComponent implements OnInit {
       hover: true, // Activate on hover
       coverTrigger: false // Show list bollow the trigger
     });
+    this.page = 'list_challenges';
   }
 
   logout() {
     this.loginServices.logout();
+  }
+
+  choose(page: string) {
+    this.page = page;
   }
 
 }
