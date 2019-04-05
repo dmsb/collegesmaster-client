@@ -3,6 +3,7 @@ import { HttpClient, HttpRequest, HttpHandler, HttpEvent, HttpHeaders, HttpInter
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
 declare var M: any;
 
 @Injectable({
@@ -18,16 +19,34 @@ export class AuthService implements HttpInterceptor {
     private router: Router) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (this.cookieService.get('access_token') != '') {
-      request = request.clone({
+    this.addAuthenticationToken(request);
+
+    return next.handle(request)
+    .pipe(catchError((error, caught) => {
+      if(error.status == 401) {
+        return this.obtainAccessTokenByRefreshToken()
+        .pipe(
+          switchMap((token: any) => {
+            this.saveToken(token);
+            return next.handle(this.addAuthenticationToken(request));
+          })
+        );
+      }
+    }));
+  }
+
+  addAuthenticationToken(request) {
+    if (this.cookieService.check('access_token')) {
+      return request.clone({
         setHeaders: {
           Authorization: `Bearer ${this.cookieService.get('access_token')}`
         }
       });
+    } else {
+      return request;
     }
-    return next.handle(request);
   }
-
+  
   obtainAccessToken(username: string, password: string) {
 
     if (this.cookieService.check('access_token')) {
@@ -55,9 +74,28 @@ export class AuthService implements HttpInterceptor {
 
   }
 
+  obtainAccessTokenByRefreshToken() {
+    
+    let params = new URLSearchParams();
+    params.append('client_id', 'angular-client');
+    params.append('grant_type', 'refresh_token');
+    params.append('refresh_token', this.cookieService.get('refresh_token'));
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': 'Basic ' + btoa("angular-client:secret"),
+        'Content-Type': 'application/x-www-form-urlencoded'
+      })
+    };
+
+    return this.httpClient.post(`http://localhost:4200/collegesmaster/oauth/token`,
+      params.toString(), httpOptions);
+  }
+
   saveToken(token) {
     var expireDate = new Date().getTime() + (1000 * token.expires_in);
-    this.cookieService.set("access_token", token.access_token, expireDate);
+    this.cookieService.set("access_token", token.access_token, new Date(expireDate));
+    this.cookieService.set("refresh_token", token.refresh_token);
     this.getUserAuthorities(expireDate);
   }
 
@@ -98,7 +136,8 @@ export class AuthService implements HttpInterceptor {
     const httpOptions = {
       headers: new HttpHeaders({
         'Authorization': 'Basic ' + btoa("angular-client:secret"),
-        'TOKEN-ID': this.cookieService.get('access_token')
+        'TOKEN-ID': this.cookieService.get('access_token'),
+        'REFRESH-TOKEN-ID': this.cookieService.get('refresh_token')
       })
     };
 

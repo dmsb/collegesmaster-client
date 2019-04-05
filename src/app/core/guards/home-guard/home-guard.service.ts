@@ -14,7 +14,7 @@ export class HomeGuardService implements CanActivate, CanActivateChild {
   //the RouterStateSnapshot contains the future RouterState of the application, 
   //should you pass through the guard check.
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    if(!this.cookieService.check('access_token')) {
+    if(!this.cookieService.check('refresh_token')) {
       this.router.navigate(['/login']);
       return false;
     } else {
