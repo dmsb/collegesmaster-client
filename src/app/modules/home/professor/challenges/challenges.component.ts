@@ -107,11 +107,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
       .subscribe(
         data => {
           this.challenges = data.content;
-          this.challenges.forEach(function (challenge) {
-            if(challenge.id == this.selectedChallenge.id) {
-              this.selectedChallenge = challenge;
-            }
-          })
+          this.selectedChallenge = this.challenges.find(challenge => challenge.id == this.selectedChallenge.id);
         },
         error=> { 
           console.log("Error in recieving data: " + error); 
@@ -120,14 +116,14 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
 
   saveChallenge(selectedChallenge: Challenge,  modalType: string) {
     
-    this.challengeService.saveChallenge(selectedChallenge).subscribe(
+    this.challengeService.saveChallenge(selectedChallenge)
+    .subscribe(
       data => {
         this.selectedChallenge = data;
         M.toast({html: 'Challenge updated with success!', classes: 'green rounded'});
-        this.loadChallenges();
         switch(modalType) {
           case "challenge" :
-            this.closeChallengeModal();
+            $('#challenge_modal').modal('close');
             break;
           case "question" :
             this.closeQuestionModal();
@@ -140,6 +136,9 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
       error=> { 
         M.toast({html: 'Challenge can\'t be updated. Please try again more latter.', classes: 'red rounded'});
         console.log("Error in recieving data: " + error);
+      },
+      () => {
+        this.loadChallenges();
       });
   }
 
@@ -153,7 +152,6 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
 
   closeChallengeModal() {
     $('#challenge_modal').modal('close');
-    this.loadChallenges();
   }
 
   setSelectedAlternative(currentAlternative : Alternative) {
