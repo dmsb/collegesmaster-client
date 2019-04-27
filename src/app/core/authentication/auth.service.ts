@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpRequest, HttpHandler, HttpEvent, HttpHeaders, HttpInterceptor } from '@angular/common/http';
+import { HttpClient, HttpRequest, HttpHandler, HttpEvent, HttpHeaders, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
 declare var M: any;
 
@@ -22,15 +22,25 @@ export class AuthService implements HttpInterceptor {
     this.addAuthenticationToken(request);
 
     return next.handle(request)
-    .pipe(catchError((error, caught) => {
-      if(error.status == 401) {
-        return this.obtainAccessTokenByRefreshToken()
-        .pipe(
-          switchMap((token: any) => {
-            this.saveToken(token);
-            return next.handle(this.addAuthenticationToken(request));
-          })
-        );
+    .pipe(catchError((error : HttpErrorResponse, caught) => {
+      switch (error.status) {
+        case 400 :
+          for(let index in error.error) {
+            M.toast({ html: error.error[index], classes: 'red rounded' })
+          }
+          break;
+        case 401 :
+          return this.obtainAccessTokenByRefreshToken()
+          .pipe(
+            switchMap((token: any) => {
+              this.saveToken(token);
+              return next.handle(this.addAuthenticationToken(request));
+            })
+          );
+        case 500 :
+          return of(error);
+        default :
+          return of(error);
       }
     }));
   }

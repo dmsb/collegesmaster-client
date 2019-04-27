@@ -10,6 +10,7 @@ import { DisciplineService } from 'src/app/core/services/discipline.service';
 import { FormControl } from '@angular/forms';
 import { Question } from 'src/app/core/models/challenge/question';
 import { Alternative } from 'src/app/core/models/challenge/alternative';
+import { ChallengeStatus } from 'src/app/core/enums/challenge-status';
 
 declare var $: any;
 declare var M: any;
@@ -54,6 +55,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
               private disciplineService: DisciplineService) { 
     this.challenges = new Array<Challenge>();
     this.selectedChallenge = new Challenge();
+    this.selectedChallenge.challengeStatus = ChallengeStatus.CREATED;
     this.selectedChallenge.discipline = new Discipline();
     this.selectedQuestion = new Question();
     this.selectedAlternative = new Alternative();
@@ -101,6 +103,18 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
     if (discipline) return discipline.name;
   }
 
+  instantiateNewChallenge(){
+    this.selectedChallenge = new Challenge();
+    this.selectedChallenge.challengeStatus = ChallengeStatus[ChallengeStatus.CREATED];
+    this.selectedQuestion = new Question();
+    this.selectedAlternative = new Alternative();
+
+    $(document).ready(function(){
+      M.updateTextFields();
+      $('select').formSelect();
+    });
+  }
+  
   loadChallenges() {
     this.challengeService.getChallengesByProfessor(this.challengesSort.active, this.challengesSort.direction,
       this.challengesPaginator.pageIndex, this.challengesPaginator.pageSize)
@@ -116,7 +130,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
 
   saveChallenge(selectedChallenge: Challenge,  modalType: string) {
     
-    this.challengeService.saveChallenge(selectedChallenge)
+    this.challengeService.saveChallenge(this.selectedChallenge)
     .subscribe(
       data => {
         this.selectedChallenge = data;
@@ -133,7 +147,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
             break;
         }
       },
-      error=> { 
+      error => {
         M.toast({html: 'Challenge can\'t be updated. Please try again more latter.', classes: 'red rounded'});
         console.log("Error in recieving data: " + error);
       },

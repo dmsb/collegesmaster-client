@@ -62,7 +62,12 @@ export class ChallengeService {
       })
     };
 
-    return this.httpClient.
-      put<Challenge>('http://localhost:4200/collegesmaster/challenges/' + unsavedChallenge.id, unsavedChallenge, httpOptions);
+    if(unsavedChallenge.id == null) {
+      return this.httpClient.
+        post<Challenge>('http://localhost:4200/collegesmaster/challenges/', unsavedChallenge, httpOptions);
+    } else {
+      return this.httpClient.
+        put<Challenge>('http://localhost:4200/collegesmaster/challenges/' + unsavedChallenge.id, unsavedChallenge, httpOptions);
+    }
   }
 }

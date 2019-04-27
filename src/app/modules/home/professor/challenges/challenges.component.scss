@@ -1,6 +1,15 @@
 .btn, .btn-large, .btn-small {
     background-color: rgb(11, 184, 252);
 }
+.card-action-row {
+    margin-bottom: 0px;
+}
+.card .card-action {
+    padding: 0px 24px;
+}
 
+a {
+    margin: 0px 3px;
+}
 //Conflay-containeig to z-index stay bigger than the modal
 /deep/ .cdk-overlay-container { z-index: 1004; }
