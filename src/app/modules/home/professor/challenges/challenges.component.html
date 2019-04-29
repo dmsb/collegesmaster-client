@@ -90,7 +90,7 @@
     <div class="row">
       <h5><i class="material-icons prefix">list</i> Questions</h5>
       <div class="input-field col s2">
-        <a class="btn-floating waves-effect waves-light btn modal-trigger" href="#question_modal"><i class="material-icons center">add</i></a>
+        <a (click) = "instantiateNewQuestion()" class="btn-floating waves-effect waves-light btn modal-trigger" href="#question_modal"><i class="material-icons center">add</i></a>
         <a class="btn-floating waves-effect waves-light btn modal-trigger" href="#question_modal"><i class="material-icons center">delete</i></a>
       </div>
       <div class="mat-elevation-z1">
@@ -128,7 +128,7 @@
 
   <div class="modal-footer">
       <a (click) = "closeChallengeModal()" class="waves-effect waves-light btn"><i class="material-icons center">cancel</i></a>
-      <a (click) = "saveChallenge(selectedChallenge, 'challenge')" class="waves-effect waves-light btn"><i class="material-icons center">save</i></a>
+      <a (click) = "saveChallenge('challenge')" class="waves-effect waves-light btn"><i class="material-icons center">save</i></a>
   </div>
 </div>
 
@@ -190,7 +190,7 @@
   </div>
   <div class="modal-footer">
       <a (click) = "closeQuestionModal()" class="waves-effect waves-light btn"><i class="material-icons center">cancel</i></a>
-      <a (click) = "saveChallenge(selectedChallenge, 'question')" class="waves-effect waves-light btn"><i class="material-icons center">save</i></a>
+      <a (click) = "updateChallengeQuestions()" class="waves-effect waves-light btn"><i class="material-icons center">save</i></a>
   </div>
 </div>
 
@@ -218,6 +218,6 @@
   </div>
   <div class="modal-footer">
       <a (click) = "closeAlternativeModal()" class="waves-effect waves-light btn"><i class="material-icons center">cancel</i></a>
-      <a (click) = "saveChallenge(selectedChallenge, 'alternative')" class="waves-effect waves-light btn"><i class="material-icons center">save</i></a>
+      <a (click) = "saveChallenge('alternative')" class="waves-effect waves-light btn"><i class="material-icons center">save</i></a>
   </div>
 </div>

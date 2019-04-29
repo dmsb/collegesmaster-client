@@ -3,7 +3,7 @@ import { ChallengeService } from 'src/app/core/services/challenge.service';
 import { Challenge } from 'src/app/core/models/challenge/challenge';
 import { ChallengeType } from 'src/app/core/enums/challenge-type';
 import {MatPaginator, MatSort} from '@angular/material';
-import {merge, of as observableOf, Observable} from 'rxjs';
+import {merge, of as observableOf, Observable, of} from 'rxjs';
 import {catchError, map, startWith, switchMap, debounceTime, distinctUntilChanged, filter} from 'rxjs/operators';
 import { Discipline } from 'src/app/core/models/institutes/discipline';
 import { DisciplineService } from 'src/app/core/services/discipline.service';
@@ -11,6 +11,7 @@ import { FormControl } from '@angular/forms';
 import { Question } from 'src/app/core/models/challenge/question';
 import { Alternative } from 'src/app/core/models/challenge/alternative';
 import { ChallengeStatus } from 'src/app/core/enums/challenge-status';
+import { Pageable } from 'src/app/core/models/generic/pageable/pageable';
 
 declare var $: any;
 declare var M: any;
@@ -44,6 +45,8 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   selectedQuestion : Question;
   selectedAlternative : Alternative;
 
+  editingAnewInstance : Boolean;
+
   enabledOptions = [
     {id : true, value : 'Yes'},
     {id : false, value : 'No'}
@@ -59,7 +62,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
     this.selectedChallenge.discipline = new Discipline();
     this.selectedQuestion = new Question();
     this.selectedAlternative = new Alternative();
-    this.myControl = new FormControl();
+    this.myControl = new FormControl();  
   }
 
   ngOnInit() {
@@ -103,9 +106,9 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
     if (discipline) return discipline.name;
   }
 
-  instantiateNewChallenge(){
+  instantiateNewChallenge() {
     this.selectedChallenge = new Challenge();
-    this.selectedChallenge.challengeStatus = ChallengeStatus[ChallengeStatus.CREATED];
+    this.selectedChallenge.challengeStatus = 'CREATED' as any;
     this.selectedQuestion = new Question();
     this.selectedAlternative = new Alternative();
 
@@ -113,6 +116,14 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
       M.updateTextFields();
       $('select').formSelect();
     });
+  }
+
+  instantiateNewQuestion() {
+    if(this.selectedChallenge.questions == null){
+      this.selectedChallenge.questions = new Array<Question>();
+    }
+    this.selectedQuestion = new Question();
+    this.editingAnewInstance = true;
   }
   
   loadChallenges() {
@@ -128,7 +139,32 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
         });
   }
 
-  saveChallenge(selectedChallenge: Challenge,  modalType: string) {
+  updateChallengeQuestions() {
+
+    if(this.selectedChallenge.questions != null && this.selectedQuestion.id == null && this.editingAnewInstance){
+      this.selectedChallenge.questions = this.selectedChallenge.questions.concat([this.selectedQuestion]);
+
+      this.questionsSort.sortChange.subscribe(() => this.questionsPaginator.pageIndex = 0);
+      merge(this.questionsSort.sortChange, this.questionsPaginator.page)
+        .pipe(
+          startWith({}),
+          switchMap(() => {
+            return of(this.selectedChallenge.questions);
+          }),
+          map(data => {
+            this.resultsQuestionLength = data.length;
+            return data;
+          }),
+          catchError(() => {
+            return observableOf([]);
+          })
+        ).subscribe(() => this.closeQuestionModal());
+    } else {
+      this.closeQuestionModal();
+    }
+  }
+
+  saveChallenge(modalType: string) {
     
     this.challengeService.saveChallenge(this.selectedChallenge)
     .subscribe(
@@ -185,9 +221,12 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
       $('select').formSelect();
     });
 
-    this.challengeService.getAlternativesByQuestion(this.selectedQuestion.id).subscribe(
-      data => this.selectedQuestion.alternatives = data
-    )
+    if(this.selectedQuestion.id != null) {
+      this.challengeService.getAlternativesByQuestion(this.selectedQuestion.id).subscribe(
+        data => this.selectedQuestion.alternatives = data
+      )
+    }
+    this.editingAnewInstance = false;
   }
   
   setSelectedChallenge(currentChallenge : Challenge) {

@@ -26,6 +26,10 @@ export class AuthService implements HttpInterceptor {
       switch (error.status) {
         case 400 :
           for(let index in error.error) {
+            if(error.error[index] == 'invalid_grant') {
+              this.logout();
+              break;
+            }
             M.toast({ html: error.error[index], classes: 'red rounded' })
           }
           break;
