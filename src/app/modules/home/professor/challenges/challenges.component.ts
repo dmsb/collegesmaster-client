@@ -12,6 +12,7 @@ import { Question } from 'src/app/core/models/challenge/question';
 import { Alternative } from 'src/app/core/models/challenge/alternative';
 import { ChallengeStatus } from 'src/app/core/enums/challenge-status';
 import { Pageable } from 'src/app/core/models/generic/pageable/pageable';
+import { Letter } from 'src/app/core/enums/letter';
 
 declare var $: any;
 declare var M: any;
@@ -35,7 +36,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   displayedQuestionColumns: string[] = ['actions', 'description', 'score'];
   resultsQuestionLength : Number = 0;
   
-  displayedAlternativeColumns: string[] = ['actions', 'description', 'isTrue'];
+  displayedAlternativeColumns: string[] = ['actions', 'letter', 'description', 'isTrue'];
 
   myControl: FormControl;
   filteredDisciplines: Observable<Discipline[]>;
@@ -45,7 +46,8 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   selectedQuestion : Question;
   selectedAlternative : Alternative;
 
-  editingAnewInstance : Boolean;
+  editingAnewQuestion : Boolean;
+  editingAnewAlternative : Boolean;
 
   enabledOptions = [
     {id : true, value : 'Yes'},
@@ -102,6 +104,19 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
       ).subscribe(data => this.challenges = data);
   }
 
+  loadChallenges() {
+    this.challengeService.getChallengesByProfessor(this.challengesSort.active, this.challengesSort.direction,
+      this.challengesPaginator.pageIndex, this.challengesPaginator.pageSize)
+      .subscribe(
+        data => {
+          this.challenges = data.content;
+          this.selectedChallenge = this.challenges.find(challenge => challenge.id == this.selectedChallenge.id);
+        },
+        error=> { 
+          console.log("Error in recieving data: " + error); 
+        });
+  }
+
   displayFn(discipline?: Discipline): string | undefined {
     if (discipline) return discipline.name;
   }
@@ -123,25 +138,21 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
       this.selectedChallenge.questions = new Array<Question>();
     }
     this.selectedQuestion = new Question();
-    this.editingAnewInstance = true;
-  }
-  
-  loadChallenges() {
-    this.challengeService.getChallengesByProfessor(this.challengesSort.active, this.challengesSort.direction,
-      this.challengesPaginator.pageIndex, this.challengesPaginator.pageSize)
-      .subscribe(
-        data => {
-          this.challenges = data.content;
-          this.selectedChallenge = this.challenges.find(challenge => challenge.id == this.selectedChallenge.id);
-        },
-        error=> { 
-          console.log("Error in recieving data: " + error); 
-        });
+    this.editingAnewQuestion = true;
   }
 
-  updateChallengeQuestions() {
+  instantiateNewAlternative() {
+    if(this.selectedQuestion.alternatives == null){
+      this.selectedQuestion.alternatives = new Array<Alternative>();
+    }
+    this.selectedAlternative = new Alternative();
+    this.selectedAlternative.letter = Letter[`${this.selectedQuestion.alternatives.length}`];
+    this.editingAnewAlternative = true;
+  }
 
-    if(this.selectedChallenge.questions != null && this.selectedQuestion.id == null && this.editingAnewInstance){
+  updateQuestionList() {
+
+    if(this.selectedChallenge.questions != null && this.selectedQuestion.id == null && this.editingAnewQuestion){
       this.selectedChallenge.questions = this.selectedChallenge.questions.concat([this.selectedQuestion]);
 
       this.questionsSort.sortChange.subscribe(() => this.questionsPaginator.pageIndex = 0);
@@ -162,6 +173,68 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
     } else {
       this.closeQuestionModal();
     }
+  }
+
+  updateAlternativeList() {
+
+    if(this.selectedQuestion.alternatives != null && this.selectedAlternative.id == null && this.editingAnewAlternative){
+      this.selectedQuestion.alternatives = this.selectedQuestion.alternatives.concat([this.selectedAlternative]);
+    }
+    this.closeAlternativeModal();
+  }
+
+  setSelectedAlternative(currentAlternative : Alternative) {
+    this.selectedAlternative = currentAlternative;
+
+    $(document).ready(function(){
+      M.updateTextFields();
+      $('select').formSelect();
+    });
+    this.editingAnewAlternative = false;
+  }
+
+  setSelectedQuestion(currentQuestion : Question) {
+    this.selectedQuestion = currentQuestion;
+    
+    $(document).ready(function(){
+      M.updateTextFields();
+      $('select').formSelect();
+    });
+
+    if(this.selectedQuestion.id != null) {
+      this.challengeService.getAlternativesByQuestion(this.selectedQuestion.id).subscribe(
+        data => this.selectedQuestion.alternatives = data
+      )
+    }
+    this.editingAnewQuestion = false;
+  }
+  
+  setSelectedChallenge(currentChallenge : Challenge) {
+    this.selectedChallenge = currentChallenge;
+    
+    this.myControl.setValue(this.selectedChallenge.discipline);
+    $(document).ready(function(){
+      M.updateTextFields();
+      $('select').formSelect();
+    });
+
+    this.questionsSort.sortChange.subscribe(() => this.questionsPaginator.pageIndex = 0);
+      merge(this.questionsSort.sortChange, this.questionsPaginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          return this.challengeService!.getQuestionsByChallenge(
+            this.selectedChallenge.id, this.questionsSort.active, this.questionsSort.direction, 
+            this.questionsPaginator.pageIndex, this.questionsPaginator.pageSize);
+        }),
+        map(data => {
+          this.resultsQuestionLength = data.totalElements;
+          return data.content;
+        }),
+        catchError(() => {
+          return observableOf([]);
+        })
+      ).subscribe(data => this.selectedChallenge.questions = data);
   }
 
   saveChallenge(modalType: string) {
@@ -192,6 +265,10 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
       });
   }
 
+  selectDiscipline(selectedDiscipline : Discipline) {
+    this.selectedChallenge.discipline = selectedDiscipline;
+  }
+
   closeAlternativeModal(){
     $('#alternative_modal').modal('close');
   }
@@ -204,60 +281,4 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
     $('#challenge_modal').modal('close');
   }
 
-  setSelectedAlternative(currentAlternative : Alternative) {
-    this.selectedAlternative = currentAlternative;
-
-    $(document).ready(function(){
-      M.updateTextFields();
-      $('select').formSelect();
-    });
-  }
-
-  setSelectedQuestion(currentQuestion : Question) {
-    this.selectedQuestion = currentQuestion;
-    
-    $(document).ready(function(){
-      M.updateTextFields();
-      $('select').formSelect();
-    });
-
-    if(this.selectedQuestion.id != null) {
-      this.challengeService.getAlternativesByQuestion(this.selectedQuestion.id).subscribe(
-        data => this.selectedQuestion.alternatives = data
-      )
-    }
-    this.editingAnewInstance = false;
-  }
-  
-  setSelectedChallenge(currentChallenge : Challenge) {
-    this.selectedChallenge = currentChallenge;
-    
-    this.myControl.setValue(this.selectedChallenge.discipline);
-    $(document).ready(function(){
-      M.updateTextFields();
-      $('select').formSelect();
-    });
-
-    this.questionsSort.sortChange.subscribe(() => this.questionsPaginator.pageIndex = 0);
-      merge(this.questionsSort.sortChange, this.questionsPaginator.page)
-      .pipe(
-        startWith({}),
-        switchMap(() => {
-          return this.challengeService!.getQuestionsByChallenge(
-            this.selectedChallenge.id, this.questionsSort.active, this.questionsSort.direction, 
-            this.questionsPaginator.pageIndex, this.questionsPaginator.pageSize);
-        }),
-        map(data => {
-          this.resultsQuestionLength = data.totalElements;
-          return data.content;
-        }),
-        catchError(() => {
-          return observableOf([]);
-        })
-      ).subscribe(data => this.selectedChallenge.questions = data);
-  }
-  
-  selectDiscipline(selectedDiscipline : Discipline) {
-    this.selectedChallenge.discipline = selectedDiscipline;
-  }
 }
