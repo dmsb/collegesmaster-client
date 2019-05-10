@@ -11,7 +11,6 @@ import { FormControl } from '@angular/forms';
 import { Question } from 'src/app/core/models/challenge/question';
 import { Alternative } from 'src/app/core/models/challenge/alternative';
 import { ChallengeStatus } from 'src/app/core/enums/challenge-status';
-import { Pageable } from 'src/app/core/models/generic/pageable/pageable';
 import { Letter } from 'src/app/core/enums/letter';
 
 declare var $: any;
@@ -37,6 +36,8 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   resultsQuestionLength : Number = 0;
   
   displayedAlternativeColumns: string[] = ['actions', 'letter', 'description', 'isTrue'];
+
+  pageSize : number = 5;
 
   myControl: FormControl;
   filteredDisciplines: Observable<Discipline[]>;

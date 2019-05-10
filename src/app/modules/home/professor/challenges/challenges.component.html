@@ -42,7 +42,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let currentChallenge; columns: displayedColumns;"></tr>
       </table>
-      <mat-paginator #matPaginatorChallenges='matPaginator' [length]="resultsLength" [pageSize]="5"></mat-paginator>
+      <mat-paginator #matPaginatorChallenges='matPaginator' [length]="resultsLength" [pageSize]="pageSize"></mat-paginator>
     </div>
   </div>
 </div>
@@ -121,7 +121,7 @@
           <tr mat-header-row *matHeaderRowDef="displayedQuestionColumns"></tr>
           <tr mat-row *matRowDef="let currentQuestion; columns: displayedQuestionColumns;"></tr>
         </table>
-        <mat-paginator #matPaginatorQuestions='matPaginator' [length]="resultsQuestionLength" [pageSize]="5"></mat-paginator>
+        <mat-paginator #matPaginatorQuestions='matPaginator' [length]="resultsQuestionLength" [pageSize]="pageSize"></mat-paginator>
       </div>
     </div>
   </div>
