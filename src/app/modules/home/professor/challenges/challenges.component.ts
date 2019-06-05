@@ -69,7 +69,16 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    
+    this.loadDisciplines();
+    $(document).ready(function(){
+      $('.modal').modal({
+        dismissible : false
+      });
+    });
+     
+  }
+
+  loadDisciplines() {
     this.filteredDisciplines = this.myControl.valueChanges
       .pipe(
         debounceTime(300),
@@ -77,12 +86,6 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
         filter(disciplineName => typeof(disciplineName) === 'string'),
         switchMap(disciplineName => 
           this.disciplineService.getDisciplinesByName(disciplineName)));
-    $(document).ready(function(){
-      $('.modal').modal({
-        dismissible : false
-      });
-    });
-     
   }
 
   ngAfterViewInit() {
@@ -118,8 +121,10 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
         });
   }
 
-  displayFn(discipline?: Discipline): string | undefined {
-    if (discipline) return discipline.name;
+  displayDiscipline(discipline?: Discipline): string | undefined {
+    if (discipline)  {
+      return discipline.name;
+    }
   }
 
   instantiateNewChallenge() {

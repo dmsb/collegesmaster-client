@@ -75,13 +75,15 @@
         </div>
         <div class="row">
           <div class="input-field col s4">
-            <input id="challenge_discipline" type="text" matInput [formControl]="myControl" [matAutocomplete]="auto">
-            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn" (optionSelected)='selectDiscipline($event.option.value)'>
+            <input id="challenge_discipline" type="text" matInput [formControl]="myControl" [matAutocomplete]="autocomplete_discipline"
+              [(ngModel)]="selectedChallenge.Discipline" />
+            <mat-autocomplete #autocomplete_discipline="matAutocomplete" [displayWith]="displayDiscipline" 
+              (optionSelected)='selectDiscipline($event.option.value)'>
               <mat-option *ngFor="let discipline of filteredDisciplines | async" [value]="discipline">
                 {{discipline.name}}
               </mat-option>
             </mat-autocomplete>
-            <label class="active" for="challenge_discipline">Discipline</label>
+            <label for="challenge_discipline">Discipline</label>
           </div>
         </div>
       </form>
