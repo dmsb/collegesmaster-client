@@ -253,8 +253,8 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
     this.challengeService.saveChallenge(this.selectedChallenge)
     .subscribe(
       data => {
+        M.toast({html: 'Challenge saved with success!', classes: 'green rounded'});
         this.selectedChallenge = data;
-        M.toast({html: 'Challenge updated with success!', classes: 'green rounded'});
         switch(modalType) {
           case "challenge" :
             $('#challenge_modal').modal('close');

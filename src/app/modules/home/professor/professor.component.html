@@ -1,10 +1,5 @@
 <div class="card">
   <div class="card-image">
-    <ul id='challenge-dropdown' class='dropdown-content'>
-      <li><a (click)="choose('create_challenge')">Create</a></li>
-      <li><a (click)="choose('challenges')">List</a></li>
-      <li><a (click)="choose('challenges')">Replieds</a></li>
-    </ul>
     <ul id='user-profile-dropdown' class='dropdown-content'>
       <li><a>Edit</a></li>
       <li><a>Forgot Password</a></li>
@@ -17,7 +12,7 @@
               <i class="material-icons left">assessment</i>Dashboard</a></li>
           <li><a class='waves-effect'>
               <i class="material-icons left">equalizer</i>Rankings</a></li>
-          <li><a class='dropdown-trigger waves-effect' data-target='challenge-dropdown'>
+          <li><a class='waves-effect' (click)="choose('challenges')">
               <i class="material-icons left">assignment</i>Challenges</a></li>
           <li><a class='dropdown-trigger waves-effect' data-target='user-profile-dropdown'>
               <i class="material-icons left">account_circle</i>Profile</a></li>
