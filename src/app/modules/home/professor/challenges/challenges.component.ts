@@ -27,7 +27,8 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   @ViewChild('matSortChallenges') challengesSort: MatSort;
 
   displayedColumns: string[] = ['actions', 'discipline.name',  'title'];
-  resultsLength : Number = 0;
+  lengthChallenges : Number = 0;
+  pageIndexChallenges : Number = 0;
 
   @ViewChild('matPaginatorQuestions') questionsPaginator: MatPaginator;
   @ViewChild('matSortQuestions') questionsSort: MatSort;
@@ -37,7 +38,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   
   displayedAlternativeColumns: string[] = ['actions', 'letter', 'description', 'isTrue'];
 
-  pageSize : number = 5;
+  pageSize : number = 2;
 
   myControl: FormControl;
   filteredDisciplines: Observable<Discipline[]>;
@@ -89,7 +90,13 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.loadChallengesAndPaginator();
+  }
+
+  loadChallengesAndPaginator() {
+    
     this.challengesSort.sortChange.subscribe(() => this.challengesPaginator.pageIndex = 0);
+   
     merge(this.challengesSort.sortChange, this.challengesPaginator.page)
       .pipe(
         startWith({}),
@@ -99,26 +106,15 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
             this.challengesPaginator.pageIndex, this.challengesPaginator.pageSize);
         }),
         map(data => {
-          this.resultsLength = data.totalElements;
+          this.lengthChallenges = data.totalElements;
+          console.log('data.number.valueOf(): ' + data.number.valueOf());
+          this.challengesPaginator.pageIndex = data.number.valueOf();
           return data.content;
         }),
         catchError(() => {
           return observableOf([]);
         })
       ).subscribe(data => this.challenges = data);
-  }
-
-  loadChallenges() {
-    this.challengeService.getChallengesByProfessor(this.challengesSort.active, this.challengesSort.direction,
-      this.challengesPaginator.pageIndex, this.challengesPaginator.pageSize)
-      .subscribe(
-        data => {
-          this.challenges = data.content;
-          this.selectedChallenge = this.challenges.find(challenge => challenge.id == this.selectedChallenge.id);
-        },
-        error=> { 
-          console.log("Error in recieving data: " + error); 
-        });
   }
 
   displayDiscipline(discipline?: Discipline): string | undefined {
@@ -267,7 +263,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
         console.log("Error in recieving data: " + error);
       },
       () => {
-        this.loadChallenges();
+        this.loadChallengesAndPaginator();
       });
   }
 

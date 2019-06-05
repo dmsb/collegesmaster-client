@@ -42,7 +42,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let currentChallenge; columns: displayedColumns;"></tr>
       </table>
-      <mat-paginator #matPaginatorChallenges='matPaginator' [length]="resultsLength" [pageSize]="pageSize"></mat-paginator>
+      <mat-paginator #matPaginatorChallenges='matPaginator' [length]="lengthChallenges" [pageSize]="pageSize" [pageIndex]="pageIndexChallenges"></mat-paginator>
     </div>
   </div>
 </div>
