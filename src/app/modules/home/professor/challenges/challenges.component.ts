@@ -107,7 +107,6 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
         }),
         map(data => {
           this.lengthChallenges = data.totalElements;
-          console.log('data.number.valueOf(): ' + data.number.valueOf());
           this.challengesPaginator.pageIndex = data.number.valueOf();
           return data.content;
         }),
@@ -183,6 +182,16 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
       this.selectedQuestion.alternatives = this.selectedQuestion.alternatives.concat([this.selectedAlternative]);
     }
     this.closeAlternativeModal();
+  }
+
+  removeChallenge(challengeId? : Number) {
+    this.challengeService.removeChallenge(challengeId).subscribe(
+      data => {
+        M.toast({ html: 'Register deleted with success!', classes: 'green rounded' });
+        this.loadChallengesAndPaginator();
+      },
+      error =>  M.toast({ html: 'Delete operation failed.', classes: 'red rounded' })
+    );
   }
 
   setSelectedAlternative(currentAlternative : Alternative) {

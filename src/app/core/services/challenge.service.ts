@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { Pageable } from '../models/generic/pageable/pageable';
 import { Question } from '../models/challenge/question';
 import { Alternative } from '../models/challenge/alternative';
+declare var M: any;
 
 @Injectable({
   providedIn: 'root'
@@ -68,6 +69,19 @@ export class ChallengeService {
     } else {
       return this.httpClient.
         put<Challenge>('http://localhost:4200/collegesmaster/challenges/' + unsavedChallenge.id, unsavedChallenge, httpOptions);
+    }
+  }
+
+  removeChallenge(challengeId : Number) : Observable<Object> {
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + this.cookieService.get('access_token')
+      })
+    };
+
+    if(challengeId) {
+      return this.httpClient.delete('http://localhost:4200/collegesmaster/challenges/' + challengeId.valueOf(), httpOptions);
     }
   }
 }
