@@ -4,7 +4,6 @@ import { HomeComponent } from '../../modules/home/home.component';
 import { HomeGuardService } from '../../core/guards/home-guard/home-guard.service';
 import { ProfessorComponent } from 'src/app/modules/home/professor/professor.component';
 import { ChallengesComponent } from 'src/app/modules/home/professor/challenges/challenges.component';
-import { CreateChallengeComponent } from 'src/app/modules/home/professor/create-challenge/create-challenge.component';
 
 
 const homeRoutes: Routes = [
@@ -12,8 +11,7 @@ const homeRoutes: Routes = [
     children: [
       { path: 'professor', component: ProfessorComponent, canActivateChild:[HomeGuardService],
         children:[
-          { path: 'challenges',  component: ChallengesComponent, canActivateChild:[HomeGuardService] },
-          { path: 'create_challenge',  component: CreateChallengeComponent, canActivateChild:[HomeGuardService] }
+          { path: 'challenges',  component: ChallengesComponent, canActivateChild:[HomeGuardService] }
         ]
       },
     ]
