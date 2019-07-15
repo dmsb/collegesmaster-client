@@ -62,7 +62,7 @@ export class ChallengeService {
         'Authorization': 'Bearer ' + this.cookieService.get('access_token')
       })
     };
-
+    
     if(unsavedChallenge.id == null) {
       return this.httpClient.
         post<Challenge>('http://localhost:4200/collegesmaster/challenges/', unsavedChallenge, httpOptions);

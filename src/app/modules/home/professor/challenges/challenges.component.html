@@ -76,7 +76,7 @@
         <div class="row">
           <div class="input-field col s4">
             <input id="challenge_discipline" type="text" matInput [formControl]="myControl" [matAutocomplete]="autocomplete_discipline"
-              [(ngModel)]="selectedChallenge.Discipline" />
+              [(ngModel)]="selectedChallenge.discipline" />
             <mat-autocomplete #autocomplete_discipline="matAutocomplete" [displayWith]="displayDiscipline" 
               (optionSelected)='selectDiscipline($event.option.value)'>
               <mat-option *ngFor="let discipline of filteredDisciplines | async" [value]="discipline">

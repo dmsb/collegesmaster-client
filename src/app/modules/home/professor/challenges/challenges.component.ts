@@ -82,7 +82,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
   loadDisciplines() {
     this.filteredDisciplines = this.myControl.valueChanges
       .pipe(
-        debounceTime(300),
+        debounceTime(600),
         distinctUntilChanged(),
         filter(disciplineName => typeof(disciplineName) === 'string'),
         switchMap(disciplineName => 

@@ -4,6 +4,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
+import { User } from '../models/security/user';
 declare var M: any;
 
 @Injectable({
@@ -121,16 +122,18 @@ export class AuthService implements HttpInterceptor {
       })
     };
 
-    this.httpClient.get<any[]>('http://localhost:4200/collegesmaster/users/logged_user_authorities', httpOptions).subscribe(
+    this.httpClient.get<User>('http://localhost:4200/collegesmaster/users/logged_user_roles', httpOptions).subscribe(
       data => {
-        let authorities = data;
-        if(authorities.length > 1) {
+        let loggedUser : User = data;
+        const loggedUserRoles = loggedUser.roles;
+        if(loggedUserRoles.length > 1) {
           //implementar tratamento para aluno/monitor
         } else {
-          let authority: string = data[0].authority;
-          this.router.navigate(['/home/'+ authority.toLowerCase() +'/challenges']);
+          const role: string = loggedUserRoles[0].name;
+          this.router.navigate(['/home/'+ role.toLowerCase() +'/challenges']);
         }
-        this.cookieService.set("user_authorities", authorities.toString(), expireDate);
+        this.cookieService.set("logged_user", JSON.stringify(loggedUser), expireDate);
+        this.cookieService.set("user_authorities", loggedUserRoles.toString(), expireDate);
         
       },
       error =>  M.toast({ html: 'Error in login request processing', classes: 'red rounded' })
