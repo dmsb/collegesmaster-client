@@ -66,7 +66,7 @@ export class ChallengesComponent implements OnInit, AfterViewInit {
     this.selectedChallenge.discipline = new Discipline();
     this.selectedQuestion = new Question();
     this.selectedAlternative = new Alternative();
-    this.myControl = new FormControl();  
+    this.myControl = new FormControl();
   }
 
   ngOnInit() {

@@ -20,7 +20,7 @@ export class AuthService implements HttpInterceptor {
     private router: Router) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.addAuthenticationToken(request);
+    request = this.buildRequestWithAuthenticationToken(request);
 
     return next.handle(request)
     .pipe(catchError((error : HttpErrorResponse, caught) => {
@@ -39,7 +39,7 @@ export class AuthService implements HttpInterceptor {
           .pipe(
             switchMap((token: any) => {
               this.saveToken(token);
-              return next.handle(this.addAuthenticationToken(request));
+              return next.handle(this.buildRequestWithAuthenticationToken(request));
             })
           );
         case 500 :
@@ -50,7 +50,7 @@ export class AuthService implements HttpInterceptor {
     }));
   }
 
-  addAuthenticationToken(request) {
+  buildRequestWithAuthenticationToken(request) {
     if (this.cookieService.check('access_token')) {
       return request.clone({
         setHeaders: {
